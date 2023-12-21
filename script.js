@@ -9,7 +9,7 @@
         var streaming = false;
 
         var video = null;
-        //var canvas = null;
+        var canvas = null;
         var photo = null;
         var startbutton = null;
         var downloadbutton = null;
@@ -42,8 +42,8 @@
 
         function startup() {
             video = document.getElementById('video');
-            const canvas = document.getElementById("canvas");
-            const ctx = canvas.getContext("2d");
+            canvas = document.getElementById("canvas");
+            ctx = canvas.getContext("2d");
             photo = document.getElementById('photo');
             startbutton = document.getElementById('startbutton');
             downloadbutton = document.getElementById('downloadbutton');
