@@ -1,8 +1,5 @@
 (function() {
 
-        const CANVAS_SIZE = 280;
-        const CANVAS_SCALE = 0.5;
-
         var width = 320;
         var height = 0;
 
@@ -22,7 +19,7 @@
 
         async function updatePredictions() {
             // Get the predictions for the canvas data.
-            const imgData = ctx.getImageData(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+            const imgData = canvas.getImageData(0, 0, CANVAS_SIZE, CANVAS_SIZE);
             const input = new onnx.Tensor(new Float32Array(imgData.data), "float32");
           
             const outputMap = await sess.run([input]);
@@ -43,7 +40,6 @@
         function startup() {
             video = document.getElementById('video');
             canvas = document.getElementById("canvas");
-            ctx = canvas.getContext("2d");
             photo = document.getElementById('photo');
             startbutton = document.getElementById('startbutton');
             downloadbutton = document.getElementById('downloadbutton');
