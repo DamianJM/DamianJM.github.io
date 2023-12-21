@@ -13,7 +13,7 @@
 
         // Load our model.
         const sess = new onnx.InferenceSession();
-        const loadingModelPromise = sess.loadModel("./model.onnx");
+        const loadingModelPromise = sess.loadModel("model.onnx");
 
         function startup() {
             video = document.getElementById('video');
