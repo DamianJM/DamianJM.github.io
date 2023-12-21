@@ -3,9 +3,6 @@
         const CANVAS_SIZE = 280;
         const CANVAS_SCALE = 0.5;
 
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
-
         var width = 320;
         var height = 0;
 
@@ -45,7 +42,8 @@
 
         function startup() {
             video = document.getElementById('video');
-            canvas = document.getElementById('canvas');
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
             photo = document.getElementById('photo');
             startbutton = document.getElementById('startbutton');
             downloadbutton = document.getElementById('downloadbutton');
