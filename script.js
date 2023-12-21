@@ -3,8 +3,10 @@
         var width = 320;
         var height = 0;
 
-        var streaming = false;
+        const CANVAS_SIZE = 280;
+        const CANVAS_SCALE = 0.5;
 
+        var streaming = false;
         var video = null;
         var canvas = null;
         var photo = null;
