@@ -1,26 +1,101 @@
-<!doctype html>
-    <head>
-    <title>Plaque Hunter</title>
-    <link rel="stylesheet" href="style.css"/>
-    </head>
-        <body>
-            <div class="contentarea">
-                <h1 >
-                    Plaque Hunter Mobile Version
-                </h1>
-                <div class="camera">
-                    <video id="video">Video stream not available.</video>
-                </div>
-                <div><button id="startbutton">Take photo</button>
-                    <button id="downloadbutton">Count Plaques</button>
-                    <button id="clearbutton">Reset</button>
-                </div>
-                <canvas id="canvas"></canvas>
-                <div class="output">
-                    <img id="photo" alt="The screen capture will appear in this box.">
-                </div>
-            </div>
-            <script src="https://cdn.jsdelivr.net/npm/onnxjs/dist/onnx.min.js"></script>
-            <script src="script.js"></script>
-        </body>
-</html>
+<head>
+	<link rel="stylesheet" href="main.css"/>
+</head>
+<body>
+	<form id="inputForm">
+		<div class="header">
+			<img class="img_class" src="iff_logo.png" alt="logo">
+		</div>
+		<div class="content">
+			<div class="content__grid">
+				<div class="col-12-s6-m4" id="method">
+					<label class="input__label">Upload Method</label>
+					<div>
+						<button data-value="upload" id="computerButton" class="bttn left fill active">Upload</button>
+						<button data-value="url" id="urlButton" class="bttn right fill">URL</button>
+						<button data-value="camera" id="captureImageButton" class="bttn right fill">Capture Image</button>
+					</div>
+				</div>
+
+				<div class="col-12-m8" id="fileSelectionContainer">
+					<label class="input__label" for="file">Select File</label>
+					<div class="flex">
+						<input class="input input--left flex-1" type="text" id="fileName"/>							
+						<button id="fileMock" class="bttn right active">Browse</button>
+					</div>
+					<input style="display: none;" type="file" id="file" />
+				</div>
+
+				<div class="col-12-m8" id="urlContainer">
+					<label class="input__label" for="file">Enter Image URL</label>
+					<div class="flex">
+						<input type="text" id="url" placeholder="https://path.to/your.jpg" class="input"/><br>
+					</div>
+				</div>
+				<div class="col-12-m8" id="CameraContainer">
+					<div class="flex">
+						<p id="openCameraButton" class="cameralabel">Click Run to Activate Camera</p><br>
+					</div>
+				</div>
+				<div class="col-12-m6">
+					<label class="input__label" for="classes">Filter Classes (if applicable) </label>
+					<input type="text" id="classes" placeholder="Enter class names" class="input"/><br>
+				</div>
+
+				<div class="col-6-m3 relative">
+					<label class="input__label" for="confidence">Min Confidence</label>
+					<div>
+						<i class="fas fa-crown"></i>
+						<span class="icon">%</span>
+						<input type="number" id="confidence" value="50" max="100" accuracy="2" min="0" class="input input__icon"/>
+					</div>
+				</div>
+				<div class="col-6-m3 relative">
+					<label class="input__label" for="overlap">Max Overlap</label>
+					<div>
+						<i class="fas fa-object-ungroup"></i>
+						<span class="icon">%</span>
+						<input type="number" id="overlap" value="50" max="100" accuracy="2" min="0" class="input input__icon"/>
+					</div>
+				</div>
+				<div class="col-6-m3" id="format">
+					<label class="input__label">Inference Result</label>
+					<div>
+						<button id="imageButton" data-value="image" class="bttn left fill active">Image</button>
+						<button id="jsonButton" data-value="json" class="bttn right fill">Raw Data</button>
+					</div>
+				</div>
+				<div class="col-12 content__grid" id="imageOptions">
+					<div class="col-12-s6-m4" id="labels">
+						<label class="input__label">Labels</label>
+						<div>
+							<button class="bttn left active">Off</button>
+							<button data-value="on" class="bttn right">On</button>
+						</div>
+					</div>
+					<div class="col-12-s6-m4" id="stroke">
+						<label class="input__label">Stroke Width</label>
+						<div>
+							<button data-value="1" class="bttn left active">1px</button>
+							<button data-value="2" class="bttn">2px</button>
+							<button data-value="5" class="bttn">5px</button>
+							<button data-value="10" class="bttn right">10px</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-12">
+					<button type="submit" value="Run Inference" class="bttn__primary">Run</button>
+				</div>
+			</div>
+			<div class="result" id="resultContainer">
+				<div class="divider"></div>
+				<div class="result__header">
+					<h3 class="headline">Result</h3>
+				</div>
+				<pre id="output" class="codeblock">here is your json</pre>
+			</div>
+		</div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="main.js"></script>
+	</form>
+</body>
