@@ -36,7 +36,7 @@ var infer = function() {
                 // loop through and display details of each detected object
                 for (var i = 0; i < objectCount; i++) {
                     var object = response.predictions[i];
-                    $('#output').append("<p>Plaque " + (i + 1) + ":" + Confidence = " + object.confidence + "</p>");
+                    $('#output').append("<p>Plaque " + (i + 1) + ":" + "Confidence" = " + object.confidence + "</p>");
                 }
             } else {
                 var arrayBufferView = new Uint8Array(response);
