@@ -1,67 +1,143 @@
-#video {
-        border: 2px solid black;
-        width: 320px;
-        height: 240px;
-    }
-    #photo {
-        border: 2px solid black;
-        width: 320px;
-        height: 240px;
-    }
-    #canvas {
-        display: none;
-    }
-    .camera {
-        width: 340px;
-        display: inline-block;
-    }
-    .output {
-        width: 340px;
-        padding-top: 20px;
-        display: inline-block;
-    }
-    #startbutton {
-        display: inline;
-        position: relative;
-        margin-left: auto;
-        margin-right: auto;
-        bottom: -5px;
-        padding: 15px;
-        background-color: #81abda;
-        border: 1px solid rgba(0, 0, 0, 0.7);
-        font-size: 14px;
-        color: rgba(255, 255, 255, 1.0);
-        cursor: pointer;
-    }
-    #downloadbutton {
-        display: inline;
-        position: relative;
-        margin-left: auto;
-        margin-right: auto;
-        bottom: -5px;
-        padding: 15px;
-        background-color: #81abda;
-        border: 1px solid rgba(0, 0, 0, 0.7);
-        font-size: 14px;
-        color: rgba(255, 255, 255, 1.0);
-        cursor: pointer;
-    }
+body {
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    background-color: #f7fafc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
 
-    #clearbutton {
-        display: inline;
-        position: relative;
-        margin-left: auto;
-        margin-right: auto;
-        bottom: -5px;
-        padding: 15px;
-        background-color: #81abda;
-        border: 1px solid rgba(0, 0, 0, 0.7);
-        font-size: 14px;
-        color: rgba(255, 255, 255, 1.0);
-        cursor: pointer;
-    }
-    .contentarea {
-        font-size: 16px;
-        font-family: Arial;
-        text-align: center;
-    }
+form {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    max-width: 500px;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.header {
+    gap: 20px;
+}
+
+.img_class {
+    margin-bottom: 50px;
+    width: 200px;
+    height: 200px;
+}
+
+.input {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 40px;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    border-color: #0075cf;
+    outline: none;
+}
+
+.bttn {
+    background-color: #86b9df;
+    border: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+    transition: background-color 0.2s;
+}
+
+.bttn:hover {
+    background-color: #0075cf;
+}
+
+.bttn.active {
+    background-color: #0075cf;
+}
+
+.bttn__primary {
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+    transition: background-color 0.2s;
+    background-color: #0075cf;
+}
+
+.bttn__primary:hover {
+    background-color:#86b9df;
+    transform: scale(1.05);
+}
+
+.camera-container {
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+}
+
+.capture {
+    margin: 10px;
+}
+
+.video {
+    flex: 1;
+}
+
+.result {
+    display: none;
+    border-top: 1px solid #ddd;
+    padding: 20px 0;
+}
+
+.result__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.codeblock {
+    background-color: #f7fafc;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+#resultContainer {
+    display: none;
+}
+
+/* Stylish hover animation for buttons */
+.bttn:hover {
+    transform: scale(1.05);
+}
+
+.bttn.active {
+    transform: scale(0.95);
+}
+
+.cameralabel {
+    border: solid;
+    border-color: #0075cf;
+    border-radius: 10px;
+    font-size: 16px;
+    padding: 10px 20px;
+    background: #0075cf;
+    color: #FFFFFF;
+}
