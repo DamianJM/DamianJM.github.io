@@ -95,6 +95,12 @@ form {
     margin: 10px;
 }
 
+.inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .video {
     flex: 1;
 }
