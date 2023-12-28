@@ -99,6 +99,7 @@ form {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    flex-basis: 100%;
 }
 
 .video {
