@@ -31,7 +31,7 @@ var infer = function() {
 
                 // Count and display the number of detected objects
                 var objectCount = response.predictions.length; // Count detected objects
-                $('#output').append("<p>Number of detected objects: " + objectCount + "</p>");
+                $('#output').append("<p>Number of detected plaques: " + objectCount + "</p>");
 
                 // loop through and display details of each detected object
                 for (var i = 0; i < objectCount; i++) {
