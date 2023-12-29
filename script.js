@@ -84,7 +84,8 @@ var retrieveDefaultValuesFromLocalStorage = function() {
 
 var setupButtonListeners = function() {
 	// run inference when the form is submitted
-    $('#CameraContainer').hide();
+    	$('#CameraContainer').hide();
+	$('#urlContainer').hide();
 	$('#inputForm').submit(function() {
 		infer();
 		return false;
