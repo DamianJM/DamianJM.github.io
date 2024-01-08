@@ -95,6 +95,7 @@ var setupButtonListeners = function() {
     $('#CameraContainer').hide();
     $('#batchfileSelectionContainer').hide();
     $('#urlContainer').hide();
+    $('#imageOptions').hide();
 	$('#inputForm').submit(function() {
 		infer();
 		return false;
@@ -105,6 +106,7 @@ var setupButtonListeners = function() {
 	$('.bttn').click(function() {
 		$(this).parent().find('.bttn').removeClass('active');
 		$(this).addClass('active');
+        
 
 		if($('#computerButton').hasClass('active')) {
 			$('#fileSelectionContainer').show();
@@ -350,17 +352,49 @@ function captureImageFromCamera(video) {
 var getBase64fromFile = function(file) {
     return new Promise(function(resolve, reject) {
         var reader = new FileReader();
-        reader.onload = function(e) {
-            var base64Image = e.target.result
 
-            resizeImage(base64Image)
-            .then(function(resizedImage) {
-                resolve(resizedImage);
-            })
-            .catch(function(error) {
+        reader.onload = function(event) {
+            // Create an Image element and set its source to the data URL
+            var img = new Image();
+            img.src = event.target.result;
+
+            img.onload = function() {
+                // Resize the image while maintaining its aspect ratio
+                var MAX_SIZE = 1024; // Set the maximum size (adjust as needed)
+                var width = img.width;
+                var height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_SIZE) {
+                        height *= MAX_SIZE / width;
+                        width = MAX_SIZE;
+                    }
+                } else {
+                    if (height > MAX_SIZE) {
+                        width *= MAX_SIZE / height;
+                        height = MAX_SIZE;
+                    }
+                }
+
+                // Create a new canvas with the resized dimensions
+                var canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Convert the canvas content to a base64 string
+                var resizedBase64 = canvas.toDataURL('image/jpeg', 0.8); // Adjust quality as needed
+
+                resolve(resizedBase64);
+            };
+
+            img.onerror = function(error) {
                 reject(error);
-            })
+            };
         };
+
         reader.readAsDataURL(file);
     });
 };
@@ -371,7 +405,7 @@ var resizeImage = function(base64Str) {
         img.src = base64Str;
         img.onload = function() {
             var canvas = document.createElement("canvas");
-            var MAX_SIZE = 1048576; // 1MB in bytes
+            var MAX_SIZE = 524288; // 0.5MB in bytes
 
             var width = img.width;
             var height = img.height;
