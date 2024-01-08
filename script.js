@@ -20,7 +20,8 @@ var infer = function() {
         };
 
         $.ajax(settings).then(function(response) {
-            if (settings.format == "json") {
+            //settings = settings[0];
+            if (settings.format == "json" && settings.input == "upload") {
                 var pretty = $('<pre>');
                 var formatted = JSON.stringify(response, null, 4);
 
@@ -38,7 +39,14 @@ var infer = function() {
                     var object = response.predictions[i];
                     $('#output').append("<p>Plaque " + (i + 1) + ": " + "Confidence = " + object.confidence + "</p>");
                 }
-            } else {
+            } 
+
+            else if (settings.format == "json" && settings.input == "batch") {
+                var objectCount = response.predictions.length;
+                $('#output').append("<p>Number of detected plaques: " + objectCount + "</p>");
+            }
+            
+            else {
                 var arrayBufferView = new Uint8Array(response);
                 var blob = new Blob([arrayBufferView], {
                     'type': 'image/jpeg'
@@ -84,8 +92,9 @@ var retrieveDefaultValuesFromLocalStorage = function() {
 
 var setupButtonListeners = function() {
 	// run inference when the form is submitted
-    	$('#CameraContainer').hide();
-	$('#urlContainer').hide();
+    $('#CameraContainer').hide();
+    $('#batchfileSelectionContainer').hide();
+    $('#urlContainer').hide();
 	$('#inputForm').submit(function() {
 		infer();
 		return false;
@@ -101,22 +110,29 @@ var setupButtonListeners = function() {
 			$('#fileSelectionContainer').show();
 			$('#urlContainer').hide();
 			$('#CameraContainer').hide();
+            $('#imageButton').show();
+            $('#batchfileSelectionContainer').hide();
 		} 
-		else if($('#captureImageButton').hasClass('active')) {
+		else if($('#batchButton').hasClass('active')) {
 			$('#fileSelectionContainer').hide();
 			$('#urlContainer').hide();
-			$('#CameraContainer').show();
+			$('#CameraContainer').hide();
+            $('#imageButton').hide();
+            $('#batchfileSelectionContainer').show();
+            $('#jsonButton').addClass('active');
 		} 
 		else {
 			$('#fileSelectionContainer').hide();
 			$('#urlContainer').show();
 			$('#CameraContainer').hide();
+            $('#imageButton').show();
+            $('#batchfileSelectionContainer').hide();
 		}
 
 		if($('#jsonButton').hasClass('active')) {
 			$('#imageOptions').hide();
 		} else {
-			$('#imageOptions').show();
+			$('#imageOptions').hide();
 		}
 
 		return false;
@@ -125,6 +141,9 @@ var setupButtonListeners = function() {
 	// wire styled button to hidden file input
 	$('#fileMock').click(function() {
 		$('#file').click();
+	});
+    $('#batchfileMock').click(function() {
+		$('#batchfile').click();
 	});
 
 	// camera buttons
@@ -150,6 +169,17 @@ var setupButtonListeners = function() {
 		var filename = parts.pop();
 		$('#fileName').val(filename);
 	});
+
+    $("#batchfile").change(function() {
+        var filenames = [];
+        for (var i = 0; i < this.files.length; i++) {
+            var path = this.files[i].name;
+            var parts = path.split("/");
+            var filename = parts.pop();
+            filenames.push(filename);
+        }
+	$('#batchfileName').val(filenames.join(", "));
+    });
 };
 
 var getSettingsFromForm = function(cb) {
@@ -192,8 +222,10 @@ var getSettingsFromForm = function(cb) {
 
     var method = $('#method .active').attr('data-value');
     if (method == "upload") {
+        settings.input = "upload";
         var file = $('#file').get(0).files && $('#file').get(0).files.item(0);
         if (!file) return alert("Please select a file.");
+        console.log(file);
 
         getBase64fromFile(file).then(function(base64image) {
             settings.url = parts.join("");
@@ -202,7 +234,23 @@ var getSettingsFromForm = function(cb) {
             console.log(settings);
             cb(settings);
         });
-    } else if (method == "camera") {
+    } 
+    else if (method == "batch") {
+        settings.input = "batch";
+        var files = $('#batchfile').get(0).files;
+        if (!files || files.length === 0) return alert("Please select one or more files.");  
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            getBase64fromFile(file).then(function(base64image) {
+                settings.url = parts.join("");
+                settings.data = base64image;
+                console.log(settings);
+                cb(settings);
+        });
+    }
+    }
+    else if (method == "camera") {
         openCamera()
             .then(function(capturedImage) {
                 // Ensure that capturedImage is defined
@@ -224,6 +272,7 @@ var getSettingsFromForm = function(cb) {
                 alert(error);
             });
     } else {
+        settings.input = "url";
         var url = $('#url').val();
         if (!url) return alert("Please enter an image URL");
 
@@ -301,43 +350,60 @@ function captureImageFromCamera(video) {
 var getBase64fromFile = function(file) {
     return new Promise(function(resolve, reject) {
         var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function() {
-            resolve(reader.result);
+        reader.onload = function(e) {
+            var base64Image = e.target.result
+
+            resizeImage(base64Image)
+            .then(function(resizedImage) {
+                resolve(resizedImage);
+            })
+            .catch(function(error) {
+                reject(error);
+            })
         };
-        reader.onerror = function(error) {
+        reader.readAsDataURL(file);
+    });
+};
+
+var resizeImage = function(base64Str) {
+    return new Promise(function(resolve, reject) {
+        var img = new Image();
+        img.src = base64Str;
+        img.onload = function() {
+            var canvas = document.createElement("canvas");
+            var MAX_SIZE = 1048576; // 1MB in bytes
+
+            var width = img.width;
+            var height = img.height;
+
+            // Calculate new dimensions while maintaining the aspect ratio
+            if (width > height) {
+                if (width > MAX_SIZE) {
+                    height *= MAX_SIZE / width;
+                    width = MAX_SIZE;
+                }
+            } else {
+                if (height > MAX_SIZE) {
+                    width *= MAX_SIZE / height;
+                    height = MAX_SIZE;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Convert the resized image to base64
+            var resizedImage = canvas.toDataURL('image/jpeg', 1.0);
+
+            resolve(resizedImage);
+        };
+
+        img.onerror = function(error) {
             reject(error);
         };
     });
 };
 
-var resizeImage = function(base64Str) {
-	return new Promise(function(resolve, reject) {
-		var img = new Image();
-		img.src = base64Str;
-		img.onload = function(){
-			var canvas = document.createElement("canvas");
-			var MAX_WIDTH = 1500;
-			var MAX_HEIGHT = 1500;
-			var width = img.width;
-			var height = img.height;
-			if (width > height) {
-				if (width > MAX_WIDTH) {
-					height *= MAX_WIDTH / width;
-					width = MAX_WIDTH;
-				}
-			} else {
-				if (height > MAX_HEIGHT) {
-					width *= MAX_HEIGHT / height;
-					height = MAX_HEIGHT;
-				}
-			}
-			canvas.width = width;
-			canvas.height = height;
-			var ctx = canvas.getContext('2d');
-			ctx.drawImage(img, 0, 0, width, height);
-			resolve(canvas.toDataURL('image/jpeg', 1.0));  
-		};
-    
-	});	
-};
