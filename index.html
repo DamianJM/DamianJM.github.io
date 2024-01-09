@@ -11,8 +11,12 @@
 		</div>
 		<div class="content">
 			<div class="content__grid">
+				<div>
+					<!--<button data-value="Phage" id="colonyButton" class="bttn left fill active">Phage</button>-->
+					<!--<button data-value="Colony" id="phageButton" class="bttn right fill">Colonies</button>-->
+				</div>
 				<div class="col-12-s6-m4" id="method">
-					<label class="input__label">Upload Method</label>
+					<!--<label class="input__label">Upload Method</label>-->
 					<div>
 						<button data-value="upload" id="computerButton" class="bttn left fill active">Upload</button>
 						<button data-value="url" id="urlButton" class="bttn right fill">URL</button>
@@ -21,27 +25,27 @@
 				</div>
 
 				<div class="col-12-m8" id="fileSelectionContainer">
-					<label class="input__label" for="file">Select File</label>
+					<!--<label class="input__label" for="file">Select File</label>-->
 					<div class="flex">
-						<input class="input input--left flex-1" type="text" id="fileName"/>							
+						<input class="input input--left flex-1" type="text" placeholder = "Select File" id="fileName"/>							
 						<button id="fileMock" class="bttn right active">Browse</button>
 					</div>
 					<input style="display: none;" type="file" id="file" />
 				</div>
 
 				<div class="col-12-m8" id="batchfileSelectionContainer">
-					<label class="input__label" for="batchfile">Select Files</label>
+					<!--<label class="input__label" for="batchfile">Select Files</label>-->
 					<div class="flex">
-						<input class="input input--left flex-1" type="text" id="batchfileName"/>							
+						<input class="input input--left flex-1" type="text" placeholder="Select One or More Files" id="batchfileName"/>							
 						<button id="batchfileMock" class="bttn right active">Browse</button>
 					</div>
 					<input style="display: none;" type="file" id="batchfile" multiple/>
 				</div>
 
 				<div class="col-12-m8" id="urlContainer">
-					<label class="input__label" for="file">Enter Image URL</label>
+					<!--<label class="input__label" for="file">Enter Image URL</label>-->
 					<div class="flex">
-						<input type="text" id="url" placeholder="https://path.to/your.jpg" class="input"/><br>
+						<input type="text" id="url" placeholder="Enter URL" class="input"/><br>
 					</div>
 				</div>
 				<div class="col-12-m8" id="CameraContainer">
@@ -55,7 +59,7 @@
 					<div>
 						<i class="fas fa-crown"></i>
 						<!-- <span class="icon">%</span> -->
-						<input type="number" id="confidence" value="50" max="100" accuracy="2" min="0" class="input input__icon"/>
+						<input type="number" id="confidence" value="50" max="100" accuracy="2" min="0" class="input input__icon conf"/>
 					</div>
 				</div>
 				<div class="col-6-m3 relative">
@@ -63,13 +67,13 @@
 					<div>
 						<i class="fas fa-object-ungroup"></i>
 						<!--<span class="icon">%</span>-->
-						<input type="number" id="overlap" value="50" max="100" accuracy="2" min="0" class="input input__icon"/>
+						<input type="number" id="overlap" value="50" max="100" accuracy="2" min="0" class="input input__icon conf"/>
 					</div>
 				</div>
 				</div>
 				<div class="inner2">
 				<div class="col-6-m3" id="format">
-					<label class="input__label">Inference Result</label>
+					<!--<label class="input__label">Inference Result</label>-->
 					<div>
 						<button id="imageButton" data-value="image" class="bttn left fill active">Image</button>
 						<button id="jsonButton" data-value="json" class="bttn right fill">Raw Data</button>
